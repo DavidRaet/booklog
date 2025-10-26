@@ -11,7 +11,8 @@ export const bookService = {
     getBookById: async (id) => {
         const response = await fetch(`${API_BASE_URL}/books/${id}`);
         if (!response.ok) throw new Error("Book not found.");
+        return response.json();
     }
-    
+
 
 }
