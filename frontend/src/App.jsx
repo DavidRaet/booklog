@@ -1,35 +1,49 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import './App.css';
+import Header from './components/Header';
+import SearchFilterBar from './components/SearchFilter/SearchFilterBar';
+import BookGrid from './components/BookGrid';
+import AddBookModal from './components/AddBookModal';
+import { useState } from 'react';
 
 function App() {
-  const [count, setCount] = useState(0)
+  // TODO: You'll implement state management here
+  // - books array
+  // - search/filter state
+  // - modal open/close state
+  // - CRUD operations (create, update, delete)
+  const [books, setBooks] = useState([])
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  // const [filter, setFilter] = useState() | Confused about what type is this filter 
+  // 
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <div className="min-h-screen bg-gray-50">
+      <Header />
+      
+      <SearchFilterBar
+        searchTerm=""
+        onSearchChange={null}
+        selectedGenre="All"
+        onGenreChange={null}
+        selectedRating="all"
+        onRatingChange={null}
+      />
+      
+      <BookGrid 
+        books={books}
+      />
+      
+      <button className="fixed bottom-8 right-8 px-8 py-4 text-xl font-bold bg-blue-600 text-white border-none rounded-full cursor-pointer shadow-lg hover:bg-blue-700 hover:shadow-xl transition-all">
+        + Add Book
+      </button>
+      
+      <AddBookModal
+        isOpen={false}
+        onClose={null}
+        onSubmit={null}
+      />
+    </div>
+  );
 }
 
-export default App
+export default App;
