@@ -3,7 +3,7 @@
 // Displays: Title, Author, Genre (tag), Rating, Review snippet, Edit/Delete icons
 // -----------------------------------------
 
-const BookCard = ({ book }) => {
+const BookCard = ({ book, onEdit, onDelete }) => {
     // TODO: Implement edit/delete handlers
     
     return (
@@ -13,10 +13,10 @@ const BookCard = ({ book }) => {
                     {book?.title || 'Book Title'}
                 </h3>
                 <div className="flex gap-2 opacity-60 hover:opacity-100 transition-opacity">
-                    <button className="hover:bg-gray-100 p-1 rounded" aria-label="Edit">
+                    <button onClick={() => onEdit(book)} className="hover:bg-gray-100 p-1 rounded" aria-label="Edit">
                         ✏️
                     </button>
-                    <button className="hover:bg-gray-100 p-1 rounded" aria-label="Delete">
+                    <button onClick={() => onDelete(book)} className="hover:bg-gray-100 p-1 rounded" aria-label="Delete">
                         🗑️
                     </button>
                 </div>
