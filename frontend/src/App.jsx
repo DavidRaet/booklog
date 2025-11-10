@@ -37,6 +37,10 @@ function App() {
     setIsModalOpen(true)
   }
 
+  const handleSaveNewBook = (bookToUpdate) => {
+    setBooks(books.map(book => book.id === bookToUpdate.id ? bookToUpdate : book))
+  }
+
   const handleDeleteBook = (bookToDelete) => {
     setBooks(books.filter(book => book.id !== bookToDelete.id ))
   }
@@ -81,7 +85,7 @@ function App() {
           setIsModalOpen(false)
           setEditingBook(null)
         }}
-        onSubmit={editingBook ? handleUpdateBook : handleAddBook}
+        onSubmit={editingBook ? handleSaveNewBook : handleAddBook}
         editingBook={editingBook}
       />
     </div>

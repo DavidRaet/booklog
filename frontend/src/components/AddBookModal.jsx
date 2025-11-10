@@ -35,7 +35,7 @@ const AddBookModal = ({ isOpen, onClose, onSubmit, book, editingBook }) => {
             title, 
             author, 
             genre,
-            rating,
+            rating: parseFloat(rating),
             review,
             ...(editingBook && {id: editingBook.id})
         }
