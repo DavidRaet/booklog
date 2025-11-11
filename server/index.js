@@ -6,11 +6,11 @@ import BookSchema from './BookSchema.js';
 const app = express();
 
 
-app.use(cors());
+app.use(cors({origin: 'http://localhost:5173'}));
 app.use(express.json());
 
 
-const API_BASE_URL = "http://localhost:3001/api";
+const API_BASE_URL = "http://localhost:3002/api";
 
 app.get("/api/books", (req, res) => {
     res.status(200).json(books);
@@ -77,6 +77,8 @@ app.delete("/api/books/:id", (req, res) => {
 });
 
 
-app.listen(3001, () => {
+app.listen(3002, () => {
     console.log(`Server running on ${API_BASE_URL}`);
 });
+
+
