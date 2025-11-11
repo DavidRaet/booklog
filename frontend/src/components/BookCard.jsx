@@ -16,7 +16,7 @@ const BookCard = ({ book, onEdit, onDelete }) => {
                     <button onClick={() => onEdit(book)} className="hover:bg-gray-100 p-1 rounded" aria-label="Edit">
                         ✏️
                     </button>
-                    <button onClick={() => onDelete(book)} className="hover:bg-gray-100 p-1 rounded" aria-label="Delete">
+                    <button onClick={() => onDelete(book.id)} className="hover:bg-gray-100 p-1 rounded" aria-label="Delete">
                         🗑️
                     </button>
                 </div>

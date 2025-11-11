@@ -12,6 +12,7 @@ const AddBookModal = ({ isOpen, onClose, onSubmit, book, editingBook }) => {
     const [genre, setGenre] = useState('')
     const [rating, setRating] = useState(0)
     const [review, setReview] = useState('')
+    const [isSubmitting, setIsSubmitting] = useState(false)
 
     useEffect(() => {
         if(editingBook){
@@ -31,6 +32,7 @@ const AddBookModal = ({ isOpen, onClose, onSubmit, book, editingBook }) => {
 
     const handleSubmit = (e) => {
         e.preventDefault()
+        setIsSubmitting(true)
         const newBook = {
             title, 
             author, 
@@ -134,6 +136,7 @@ const AddBookModal = ({ isOpen, onClose, onSubmit, book, editingBook }) => {
                         <button 
                             type="submit" 
                             className="px-6 py-3 text-base border-none rounded-md bg-blue-600 text-white hover:bg-blue-700 cursor-pointer transition-colors"
+                            disabled={isSubmitting}
                         >
                             {editingBook ? 'Update' : 'Add Book'}
                         </button>

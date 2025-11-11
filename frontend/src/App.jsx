@@ -3,7 +3,8 @@ import Header from './components/Header';
 import SearchFilterBar from './components/SearchFilter/SearchFilterBar';
 import BookGrid from './components/BookGrid';
 import AddBookModal from './components/AddBookModal';
-import { useState } from 'react';
+import { bookService } from './services/bookService';
+import { useState, useEffect } from 'react';
 
 function App() {
   // TODO: You'll implement state management here
@@ -11,25 +12,40 @@ function App() {
   // - search/filter state
   // - modal open/close state
   // - CRUD operations (create, update, delete)
-  const [books, setBooks] = useState([
-    { id: 1, title: 'Test Book', author: 'Author', genre: 'Fiction', rating: 5 }, 
-    { id: 2, title: 'Another Book', author: 'Author', genre: 'Fantasy', rating: 4 },
-    { id: 3, title: 'Third Book', author: 'Writer', genre: 'Non-Fiction', rating: 3 }
-  ])
+  const [books, setBooks] = useState([])
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [searchBook, setSearchBook] = useState('') 
   const [selectedGenre, setSelectedGenre] = useState('All')
   const [selectedRating, setSelectedRating] = useState('All')
   const [editingBook, setEditingBook] = useState(null)
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-
-  const handleAddBook = (newBook) => {
-    const bookWithId = {
-      ...newBook ,
-      id: Date.now(),
+  useEffect(() =>{
+    setLoading(true)
+    const fetchBooks = async () => {
+      try {
+        const data = await bookService.getAllBooks()
+        setBooks(data)
+      } catch (err){
+        setError(err.message)
+      } finally{
+        setLoading(false)
+      }
     }
-    setBooks([...books, bookWithId])
-    setIsModalOpen(false)
+    fetchBooks()
+  }, [])
+
+
+  const handleAddBook = async (newBook) => {
+    try {
+        const bookData = await bookService.createBook(newBook)
+        setBooks([...books, bookData])
+        setIsModalOpen(false)
+    } catch (err) {
+      alert("Failed to add book: " + err.message)
+      console.error(err)
+    }
   }
 
   const handleUpdateBook = (book) => {
@@ -37,12 +53,28 @@ function App() {
     setIsModalOpen(true)
   }
 
-  const handleSaveNewBook = (bookToUpdate) => {
-    setBooks(books.map(book => book.id === bookToUpdate.id ? bookToUpdate : book))
+  const handleSaveNewBook = async (updatedBook) => {
+    try {
+        const updatedBookData = await bookService.updateBook(updatedBook.id, updatedBook)
+        setBooks(books.map(book => book.id === updatedBookData.id ? updatedBookData : book))
+        setIsModalOpen(false)
+        setEditingBook(null)
+    } catch (err) {
+        alert("Failed to update book: " + err.message)
+    }
   }
 
-  const handleDeleteBook = (bookToDelete) => {
-    setBooks(books.filter(book => book.id !== bookToDelete.id ))
+  const handleDeleteBook = async (bookID) => {
+    try {
+      if (window.confirm("Are you sure you want to delete this book?")){
+          await bookService.deleteBook(bookID)
+          setBooks(books.filter(book => book.id !== bookID ))
+      } else {
+        return 
+      }
+    } catch (err) {
+      alert("Failed to delete book: " + err.message)
+    }
   }
 
   const filteredBooks = 
