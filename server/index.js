@@ -1,8 +1,8 @@
 import express from 'express';
 import cors from 'cors';
 import { v4 as uuidv4 } from 'uuid';
-import books from './books.js';
 import BookSchema from './BookSchema.js';
+import { loadBooks, saveBooks } from './bookStorage.js';
 const app = express();
 
 
@@ -27,12 +27,15 @@ app.get("/api/books/:id", (req, res) => {
     }
 });
 
-app.post("/api/books", (req, res) => {
+let books = await loadBooks()
+
+app.post("/api/books", async (req, res) => {
     const result = BookSchema.omit({ id: true }).safeParse(req.body);
 
     if (result.success){
         const newBook = {id: uuidv4(), ...result.data };
         books.push(newBook);
+        await saveBooks(books);
         res.status(201).json(newBook);
     } else {
         res.status(400).json({ 
@@ -42,7 +45,7 @@ app.post("/api/books", (req, res) => {
     }
 }); 
 
-app.put("/api/books/:id", (req, res) => {
+app.put("/api/books/:id", async (req, res) => {
     const id = req.params.id;
     const bookID = books.findIndex(book => book.id === id);
 
@@ -61,15 +64,17 @@ app.put("/api/books/:id", (req, res) => {
     }
 
     books[bookID] = updatedBook.data;
+    await saveBooks(books)
     res.status(200).json(books[bookID]); 
 });
 
-app.delete("/api/books/:id", (req, res) => {
+app.delete("/api/books/:id", async (req, res) => {
     const id = req.params.id;
     const bookID = books.findIndex(book => book.id === id);
 
     if (bookID !== -1){
         books.splice(bookID, 1); 
+        await saveBooks(books)
         res.status(204).send();
     } else {
         res.status(404).json({ message: "Book you are trying to delete cannot be found." });

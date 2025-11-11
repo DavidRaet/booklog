@@ -40,6 +40,9 @@ function App() {
   const handleAddBook = async (newBook) => {
     try {
         const bookData = await bookService.createBook(newBook)
+        console.log('Book from API:', bookData)  
+        console.log('Current books:', books)      
+        console.log('New books array:', [...books, bookData])  
         setBooks([...books, bookData])
         setIsModalOpen(false)
     } catch (err) {
@@ -78,7 +81,7 @@ function App() {
   }
 
   const filteredBooks = 
-                 books.filter(book => book.title.includes(searchBook.toLowerCase()))
+                 books.filter(book => book.title.toLowerCase().includes(searchBook.toLowerCase()))
                       .filter(book => selectedGenre === 'All' || book.genre === selectedGenre)
                       .filter(book => selectedRating === 'All' || book.rating >= parseInt(selectedRating))
   
