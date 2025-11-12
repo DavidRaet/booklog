@@ -1,12 +1,6 @@
-// -----------------------------------------
-// AddBookModal Component
-// Modal for adding/editing books (hidden by default)
-// -----------------------------------------
 import { useEffect, useState } from "react";
 
 const AddBookModal = ({ isOpen, onClose, onSubmit, book, editingBook }) => {
-    // TODO: You'll implement form state and submission logic
-    // book prop is for editing existing books (pre-fill form)
     const [title, setTitle] = useState('')
     const [author, setAuthor] = useState('')
     const [genre, setGenre] = useState('')
@@ -21,16 +15,20 @@ const AddBookModal = ({ isOpen, onClose, onSubmit, book, editingBook }) => {
             setGenre(editingBook.genre)
             setRating(editingBook.rating)
             setReview(editingBook.review)
-        } else {
+        } 
+    },[editingBook])
+
+    useEffect(() => {
+        if(!isOpen){
             setTitle('')
             setAuthor('')
             setGenre('')
             setRating(0)
             setReview('')
         }
-    },[editingBook])
+    }, [isOpen])
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault()
         setIsSubmitting(true)
         const newBook = {
@@ -41,8 +39,17 @@ const AddBookModal = ({ isOpen, onClose, onSubmit, book, editingBook }) => {
             review,
             ...(editingBook && {id: editingBook.id})
         }
-        onSubmit(newBook)
-        onClose()
+        try {
+            await onSubmit(newBook)
+            onClose()
+        } catch (err) {
+            console.error("Submit failed: ", err)
+        } finally {
+            setIsSubmitting(false)
+        }
+        
+        
+        
     }
 
     if (!isOpen) return null;

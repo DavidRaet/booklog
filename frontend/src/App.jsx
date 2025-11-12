@@ -3,15 +3,12 @@ import Header from './components/Header';
 import SearchFilterBar from './components/SearchFilter/SearchFilterBar';
 import BookGrid from './components/BookGrid';
 import AddBookModal from './components/AddBookModal';
+import BookDetailsPage from './components/BookDetailsPage';
 import { bookService } from './services/bookService';
 import { useState, useEffect } from 'react';
+import { Routes, Route } from 'react-router-dom'
 
 function App() {
-  // TODO: You'll implement state management here
-  // - books array
-  // - search/filter state
-  // - modal open/close state
-  // - CRUD operations (create, update, delete)
   const [books, setBooks] = useState([])
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [searchBook, setSearchBook] = useState('') 
@@ -44,7 +41,6 @@ function App() {
         console.log('Current books:', books)      
         console.log('New books array:', [...books, bookData])  
         setBooks([...books, bookData])
-        setIsModalOpen(false)
     } catch (err) {
       alert("Failed to add book: " + err.message)
       console.error(err)
@@ -60,10 +56,10 @@ function App() {
     try {
         const updatedBookData = await bookService.updateBook(updatedBook.id, updatedBook)
         setBooks(books.map(book => book.id === updatedBookData.id ? updatedBookData : book))
-        setIsModalOpen(false)
-        setEditingBook(null)
+
     } catch (err) {
         alert("Failed to update book: " + err.message)
+        throw err
     }
   }
 
@@ -88,7 +84,9 @@ function App() {
   return (
     <div className="min-h-screen bg-gray-50">
       <Header />
-      
+      <Routes>
+        <Route path='/' element={
+          <>
       <SearchFilterBar
         searchTerm={searchBook}
         onSearchChange={(e) => setSearchBook(e.target.value)}
@@ -113,7 +111,10 @@ function App() {
       >
         + Add Book
       </button>
-      
+          </>
+        } />
+        <Route path='/books/:id' element={<BookDetailsPage onDelete={handleDeleteBook} onEdit={handleUpdateBook} />} />
+      </Routes>
       <AddBookModal
         isOpen={isModalOpen}
         onClose={() => {

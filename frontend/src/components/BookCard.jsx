@@ -1,22 +1,37 @@
-// -----------------------------------------
-// BookCard Component
-// Displays: Title, Author, Genre (tag), Rating, Review snippet, Edit/Delete icons
-// -----------------------------------------
+import { useNavigate } from "react-router-dom";
 
 const BookCard = ({ book, onEdit, onDelete }) => {
     // TODO: Implement edit/delete handlers
-    
+    const navigate = useNavigate()
+
+    const handleCardClick = () => {
+        navigate(`/books/${book.id}`)
+    }
+
     return (
-        <div className="bg-white rounded-lg p-6 shadow-md hover:shadow-xl hover:scale-[1.02] transition-all cursor-pointer">
+        <div 
+        className="bg-white rounded-lg p-6 shadow-md hover:shadow-xl hover:scale-[1.02] transition-all cursor-pointer"
+        onClick={handleCardClick}
+        >
             <div className="flex justify-between items-start mb-2">
                 <h3 className="text-xl font-bold text-gray-800 flex-1">
                     {book?.title || 'Book Title'}
                 </h3>
                 <div className="flex gap-2 opacity-60 hover:opacity-100 transition-opacity">
-                    <button onClick={() => onEdit(book)} className="hover:bg-gray-100 p-1 rounded" aria-label="Edit">
+                    <button 
+                    onClick={(e) => {
+                        e.stopPropagation()
+                        onEdit(book)
+                    }} 
+                    className="hover:bg-gray-100 p-1 rounded" aria-label="Edit">
                         ✏️
                     </button>
-                    <button onClick={() => onDelete(book.id)} className="hover:bg-gray-100 p-1 rounded" aria-label="Delete">
+                    <button 
+                    onClick={(e) => {
+                        e.stopPropagation()
+                        onDelete(book.id)
+                    }} 
+                    className="hover:bg-gray-100 p-1 rounded" aria-label="Delete">
                         🗑️
                     </button>
                 </div>
