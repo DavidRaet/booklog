@@ -6,7 +6,8 @@ const BookSchema = z.object({
   author: z.string().min(1).max(100),
   genre: z.string().min(1).max(50),
   rating: z.number().min(0).max(5),
-  review: z.string().max(2000).optional()
+  review: z.string().max(2000).optional(),
+  user_id: z.uuid().optional()
 });
 
 

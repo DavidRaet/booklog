@@ -4,7 +4,7 @@ import bcrypt from 'bcrypt'
 const SALT_ROUNDS = 10
 
 export const createUser = async (username, email, password) => {
-    const password_hash = bcrypt.hash(password, SALT_ROUNDS)
+    const password_hash = await bcrypt.hash(password, SALT_ROUNDS)
 
     const result = await pool.query(
         `INSERT INTO USERS (username, email, password_hash)

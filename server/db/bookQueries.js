@@ -12,14 +12,21 @@ export const getBookById = async (id) => {
     return result.rows[0]
 }
 
+
+export const getBooksByUserId = async (userId) => {
+    const result = await pool.query('SELECT * FROM books WHERE user_id = $1', [userId])
+
+    return result.rows
+}
+
 export const createBook = async (book) => {
-    const { title, author, genre, rating, review } = book 
+    const { title, author, genre, rating, review, user_id } = book 
 
     const result = await pool.query(
-        `INSERT INTO books (title, author, genre, rating, review) 
-         VALUES ($1, $2, $3, $4, $5)
+        `INSERT INTO books (title, author, genre, rating, review, user_id) 
+         VALUES ($1, $2, $3, $4, $5, $6)
          RETURNING *`,
-        [title, author, genre, rating, review]
+        [title, author, genre, rating, review, user_id]
     )
     return result.rows[0]
 } 
