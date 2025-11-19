@@ -1,5 +1,5 @@
 import * as userQueries from '../db/userQueries.js'
-import { generateToken } from '../utils/jwt.js'
+import { generateToken, verifyToken } from '../utils/jwt.js'
 import LoginSchema  from '../schemas/LoginSchema.js'
 import SignUpSchema  from '../schemas/SignUpSchema.js'
 import express from 'express'
@@ -7,6 +7,16 @@ import express from 'express'
 
 const router = express.Router()
 
+
+
+router.get('/verify', async (req, res) => {
+    const checkValidToken = verifyToken(req.headers.token)
+    if(checkValidToken){
+        return res.status(200).json({ valid: true, user: checkValidToken })
+    } else {
+        return res.status(401).json({ valid: false, message: "Invalid or expired token" })
+    }
+})
 
 router.post('/signup', async (req, res) => {
     const validation = SignUpSchema.safeParse(req.body)
