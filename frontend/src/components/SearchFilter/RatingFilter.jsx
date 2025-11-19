@@ -1,10 +1,5 @@
-// -----------------------------------------
-// RatingFilter Component
-// Filters or sorts by rating
-// -----------------------------------------
 
 const RatingFilter = ({ selectedRating, onRatingChange }) => {
-    // TODO: You'll implement filtering/sorting logic
     const ratingOptions = [
         { label: 'All Ratings', value: 'All' },
         { label: '5 Stars', value: '5' },

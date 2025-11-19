@@ -1,14 +1,26 @@
 const API_BASE_URL = "http://localhost:3002/api";
 
+const getHeaders = () => {
+    const token = localStorage.getItem('token');
+    return {
+        "Content-Type": "application/json",
+        "Authorization": token ? `Bearer ${token}` : ""
+    };
+};
+
 export const bookService = {
     getAllBooks: async () => {
-        const response = await fetch(`${API_BASE_URL}/books`);
+        const response = await fetch(`${API_BASE_URL}/books`, {
+            headers: getHeaders()
+        });
         if (!response.ok) throw new Error("Failed to fetch books.");
         return response.json();
     },
 
     getBookById: async (id) => {
-        const response = await fetch(`${API_BASE_URL}/books/${id}`);
+        const response = await fetch(`${API_BASE_URL}/books/${id}`, {
+            headers: getHeaders()
+        });
         if (!response.ok) throw new Error("Book not found.");
         return response.json();
     },
@@ -16,10 +28,10 @@ export const bookService = {
     createBook: async (bookData) => {
         const response = await fetch(`${API_BASE_URL}/books`, {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: getHeaders(),
             body: JSON.stringify(bookData)
         });
-        if (!response.ok) return new Error("Failed to create book.");
+        if (!response.ok) throw new Error("Failed to create book.");
 
         return response.json();
     },
@@ -27,10 +39,10 @@ export const bookService = {
     updateBook: async (id, bookData) => {
         const response = await fetch(`${API_BASE_URL}/books/${id}`, {
             method: "PUT",
-            headers: { "Content-Type": "application/json" },
+            headers: getHeaders(),
             body: JSON.stringify(bookData)
         });
-        if (!response.ok) return new Error("Failed to update book.");
+        if (!response.ok) throw new Error("Failed to update book.");
 
         return response.json();
     },
@@ -38,7 +50,8 @@ export const bookService = {
     deleteBook: async (id) => {
         const response = await fetch(`${API_BASE_URL}/books/${id}`, {
             method: "DELETE",
+            headers: getHeaders()
         });
-        if (!response.ok) return new Error("Failed to delete book.");
+        if (!response.ok) throw new Error("Failed to delete book.");
     },
 };
