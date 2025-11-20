@@ -3,7 +3,7 @@ import request from 'supertest';
 import app from '../../index.js';
 import pool from '../../database.js';
 import { createRandomUser } from '../../utils/createRandomUser.js';
-import { getUserById } from '../../db/userQueries.js';
+import { getUserByEmail } from '../../db/userQueries.js';
 describe('Auth Routes Integration', () => {
 
     afterAll(async () => {
@@ -38,7 +38,7 @@ describe('Auth Routes Integration', () => {
 
     describe('POST /api/auth/login', () => {
         it('should login successfully with valid credentials', async () => {
-            const user = await getUserById('67fded64-7d16-47c3-86fd-fac8d2d8c62e')
+            const user = await getUserByEmail('meEmail@example.com')
             const res = await request(app)
                                 .post('/api/auth/login')
                                 .send({"email": user.email, "password": "PasswordIsMe"})
@@ -47,7 +47,7 @@ describe('Auth Routes Integration', () => {
         });
 
         it('should return 401 for invalid credentials', async () => {
-            const user = await getUserById('67fded64-7d16-47c3-86fd-fac8d2d8c62e')
+            const user = await getUserByEmail('meEmail@example.com')
             
             const res = await request(app)
                                 .post('/api/auth/login')
