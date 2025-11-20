@@ -1,5 +1,4 @@
 import { SearchSlash } from 'lucide-react';
-
 const SearchBar = ({ searchTerm, onSearchChange }) => {
     return (
         <div className="relative flex-1 max-w-md">

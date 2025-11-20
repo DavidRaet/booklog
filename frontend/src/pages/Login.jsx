@@ -31,10 +31,8 @@ const Login = () => {
 
     return (
         <div className="min-h-screen flex">
-            {/* Left Side - Form */}
             <div className="w-full lg:w-1/2 flex flex-col justify-center px-8 sm:px-12 lg:px-24 bg-secondary">
                 <div className="w-full max-w-md mx-auto space-y-8">
-                    {/* Header */}
                     <div className="space-y-2">
                         <h1 className="text-3xl font-bold text-primary">Welcome back</h1>
                         <p className="text-slate-600">
@@ -42,7 +40,6 @@ const Login = () => {
                         </p>
                     </div>
 
-                    {/* Form */}
                     <form onSubmit={handleSubmit} className="space-y-6">
                         {error && (
                             <div className="p-3 text-sm text-red-600 bg-red-50 rounded-lg">
@@ -86,7 +83,6 @@ const Login = () => {
                 </div>
             </div>
 
-            {/* Right Side - Decorative */}
             <div className="hidden lg:flex w-1/2 bg-primary relative overflow-hidden items-center justify-center">
                 <div className="absolute inset-0 bg-gradient-to-br from-primary to-blue-900 opacity-90"></div>
                 <div className="relative z-10 text-center px-12">

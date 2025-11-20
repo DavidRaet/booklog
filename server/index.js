@@ -110,8 +110,13 @@ app.delete("/api/books/:id", authenticateToken, async (req, res) => {
 });
 
 
-app.listen(3002, () => {
-    console.log(`Server running on ${API_BASE_URL}`);
-});
+
+if (process.env.NODE_ENV !== 'test') {
+    app.listen(3002, () => {
+        console.log(`Server running on ${API_BASE_URL}`);
+    });
+}
+
+export default app;
 
 

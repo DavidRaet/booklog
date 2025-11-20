@@ -24,7 +24,7 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const { user, isAuthenticated, login, logout } = useAuth()
+  const { user, isAuthenticated, logout } = useAuth()
 
   console.log('Auth state', { user, isAuthenticated })
 

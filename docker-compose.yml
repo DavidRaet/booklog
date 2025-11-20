@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:13-alpine 
+    environment:
+      POSTGRES_USER: user 
+      POSTGRES_PASSWORD: pass 
+      POSTGRES_DB: booklog
+    ports:
+      - PORT
+    volumes:
+      - db_data: /var/lib/postgresql/data
+  server:
+    build: ./server
+    ports:
+      - "3002:3002"
+    environment:
+      DB_HOST: db
+      DB_USER: user 
+      DB_PASSWORD: password 
+      DB_NAME: booklog 
+    depends_on:
+      - db
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - servervolumes: 
+        db_data:
