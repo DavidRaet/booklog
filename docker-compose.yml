@@ -13,7 +13,7 @@ services:
     ports:
       - "3002:3002"
     env_file:
-      - ./server/.env
+      - ./server/.env.prod
     depends_on:
       - db
 
