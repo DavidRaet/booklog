@@ -12,6 +12,9 @@ import Signup from './pages/Signup'
 import ProtectedRoute from './components/ProtectedRoute'
 import { useAuth } from './hooks/useAuth'
 
+import LoadingState from './components/LoadingState';
+import ErrorState from './components/ErrorState';
+
 function App() {
   const location = useLocation()
   const isAuthPage = ['/login', '/signup'].includes(location.pathname)
@@ -101,26 +104,32 @@ function App() {
         <Route path="/signup" element={<Signup />} />
         <Route path='/' element={
           <ProtectedRoute>
-            <>
-              <SearchFilterBar
-                searchTerm={searchBook}
-                onSearchChange={(e) => setSearchBook(e.target.value)}
-                selectedGenre={selectedGenre}
-                onGenreChange={(e) => setSelectedGenre(e.target.value)}
-                selectedRating={selectedRating}
-                onRatingChange={(e) => setSelectedRating(e.target.value)}
-                onAddBook={() => {
-                  setIsModalOpen(true)
-                  setEditingBook(null)
-                }}
-              />
+            {loading ? (
+              <LoadingState />
+            ) : error ? (
+              <ErrorState message={error} />
+            ) : (
+              <>
+                <SearchFilterBar
+                  searchTerm={searchBook}
+                  onSearchChange={(e) => setSearchBook(e.target.value)}
+                  selectedGenre={selectedGenre}
+                  onGenreChange={(e) => setSelectedGenre(e.target.value)}
+                  selectedRating={selectedRating}
+                  onRatingChange={(e) => setSelectedRating(e.target.value)}
+                  onAddBook={() => {
+                    setIsModalOpen(true)
+                    setEditingBook(null)
+                  }}
+                />
 
-              <BookGrid
-                books={filteredBooks}
-                onEdit={handleUpdateBook}
-                onDelete={handleDeleteBook}
-              />
-            </>
+                <BookGrid
+                  books={filteredBooks}
+                  onEdit={handleUpdateBook}
+                  onDelete={handleDeleteBook}
+                />
+              </>
+            )}
           </ProtectedRoute>
         } />
         <Route path='/books/:id' element={<BookDetailsPage onDelete={handleDeleteBook} onEdit={handleUpdateBook} />} />

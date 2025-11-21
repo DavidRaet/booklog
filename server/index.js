@@ -28,7 +28,7 @@ app.get("/api/books", authenticateToken, async (req, res) => {
             userId: req.userId,
             error: err.message,
             stack: err.stack
-        })
+        });
         res.status(500).json({ message: "Failed to fetch books." });
     }
 });
@@ -36,8 +36,8 @@ app.get("/api/books", authenticateToken, async (req, res) => {
 app.get("/api/books/:id", authenticateToken, async (req, res) => {
     try {
         const id = req.params.id;
-        const book = await verifyBookOwnership(id, req.userId)
-        res.status(200).json(book)
+        const book = await verifyBookOwnership(id, req.userId);
+        res.status(200).json(book);
     } catch (err) {
         if (err.statusCode) res.status(500).json({ message: "Failed to fetch book" });
     }
@@ -50,7 +50,7 @@ app.post("/api/books", authenticateToken, async (req, res) => {
 
     if (result.success) {
         try {
-            const bookData = { ...result.data, user_id: req.userId }
+            const bookData = { ...result.data, user_id: req.userId };
             const newBook = await bookQueries.createBook(bookData);
             res.status(201).json(newBook);
         } catch (err) {
@@ -91,14 +91,14 @@ app.delete("/api/books/:id", authenticateToken, async (req, res) => {
     const id = req.params.id;
 
     try {
-        const existingBook = await bookQueries.getBookById(id)
+        const existingBook = await bookQueries.getBookById(id);
 
         if (!existingBook) {
-            return res.status(404).json({ message: 'Book was not found.' })
+            return res.status(404).json({ message: 'Book was not found.' });
         }
 
         if (existingBook.user_id !== req.userId) {
-            return res.status(403).json({ message: "You don't have access to this book." })
+            return res.status(403).json({ message: "You don't have access to this book." });
         }
 
         await bookQueries.deleteBook(id);

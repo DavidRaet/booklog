@@ -11,10 +11,10 @@ describe('Book Routes Integration', () => {
     let userId;
     
     beforeAll(async () => {
-        const user = createRandomUser()
-        const testUser = await createUser(user.username, user.email, user.password)
-        userId = testUser.id
-        authToken = generateToken(userId)
+        const user = createRandomUser();
+        const testUser = await createUser(user.username, user.email, user.password);
+        userId = testUser.id;
+        authToken = generateToken(userId);
         
     });
 
@@ -26,32 +26,32 @@ describe('Book Routes Integration', () => {
         it('should return all books for the authenticated user', async () => {
             const res = await request(app)
                             .get('/api/books')
-                            .set('Authorization', `Bearer ${authToken}`)
+                            .set('Authorization', `Bearer ${authToken}`);
 
-            expect(res.status).toBe(200)
+            expect(res.status).toBe(200);
 
-            expect(Array.isArray(res.body)).toBe(true)
+            expect(Array.isArray(res.body)).toBe(true);
         });
 
         it('should return 401 if no token is provided', async () => {
 
-            const res = await request(app).get('/api/books')
+            const res = await request(app).get('/api/books');
 
-            expect(res.status).toBe(401)
+            expect(res.status).toBe(401);
         });
     });
 
     describe('POST /api/books', () => {
         it('should create a new book', async () => {
-            const newBook = {"title": "TestBook", "author": "TestAuthor", "genre": "Fiction", "rating": 4.2, "review": "This rating is a test."}
+            const newBook = {"title": "TestBook", "author": "TestAuthor", "genre": "Fiction", "rating": 4.2, "review": "This rating is a test."};
 
             const res = await request(app)
                             .post('/api/books').set('Authorization', `Bearer ${authToken}`)
-                            .send(newBook)
+                            .send(newBook);
 
-            expect(res.status).toBe(201)
+            expect(res.status).toBe(201);
             
-            expect(res.body).toMatchObject(newBook)
+            expect(res.body).toMatchObject(newBook);
         });
 
     });
