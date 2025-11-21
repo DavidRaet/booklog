@@ -44,6 +44,11 @@ jobs:
           env:
             DATABASE_URL: postgresql://${{ vars.POSTGRES_USER }}:${{ vars.POSTGRES_PASSWORD }}@localhost:5432/${{ vars.POSTGRES_DB }}
             JWT_SECRET: ${{ secrets.JWT_SECRET }}
+            POSTGRES_DB: ${{ vars.POSTGRES_DB }}
+            POSTGRES_PASSWORD: ${{ vars.POSTGRES_PASSWORD }}
+            POSTGRES_USER: ${{ vars.POSTGRES_USER }}
+
+          
 
   lint:
       runs-on: ubuntu-latest
