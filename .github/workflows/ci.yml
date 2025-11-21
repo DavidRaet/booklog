@@ -43,7 +43,7 @@ jobs:
           run: npm test 
           working-directory: ./server
           env:
-            DATABASE_URL: postgresql://${{ secrets.POSTGRES_USER }}:${{ secrets.POSTGRES_PASSWORD }}@localhost:5432/${{ secrets.POSTGRES_DB }}
+            DATABASE_URL: postgresql://${{ vars.POSTGRES_USER }}:${{ vars.POSTGRES_PASSWORD }}@localhost:5432/${{ vars.POSTGRES_DB }}
 
   lint:
       runs-on: ubuntu-latest
