@@ -1,9 +1,10 @@
-import { describe, it, expect, beforeAll, afterAll, test } from 'vitest';
+import { describe, it, expect, afterAll } from 'vitest';
 import request from 'supertest';
 import app from '../../index.js';
 import pool from '../../database.js';
 import { createRandomUser } from '../../utils/createRandomUser.js';
 import { getUserByEmail } from '../../db/userQueries.js';
+
 describe('Auth Routes Integration', () => {
 
     afterAll(async () => {
