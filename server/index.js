@@ -78,8 +78,9 @@ app.put("/api/books/:id", authenticateToken, async (req, res) => {
     }
 
     try {
-        const book = await verifyBookOwnership(id, req.userId);
-        res.status(200).json(book);
+        await verifyBookOwnership(id, req.userId);
+        const updatedBook = await bookQueries.updateBook(id, validation.data)
+        res.status(200).json(updatedBook);
 
     } catch (err) {
         console.error('Database error:', err);
@@ -91,16 +92,7 @@ app.delete("/api/books/:id", authenticateToken, async (req, res) => {
     const id = req.params.id;
 
     try {
-        const existingBook = await bookQueries.getBookById(id);
-
-        if (!existingBook) {
-            return res.status(404).json({ message: 'Book was not found.' });
-        }
-
-        if (existingBook.user_id !== req.userId) {
-            return res.status(403).json({ message: "You don't have access to this book." });
-        }
-
+        await verifyBookOwnership(id, req.userId);
         await bookQueries.deleteBook(id);
         res.status(204).send();
     } catch (err) {

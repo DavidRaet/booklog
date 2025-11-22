@@ -15,7 +15,6 @@ describe('Book Routes Integration', () => {
         const testUser = await createUser(user.username, user.email, user.password);
         userId = testUser.id;
         authToken = generateToken(userId);
-        
     });
 
     afterAll(async () => {

@@ -24,8 +24,8 @@ function App() {
   const [selectedGenre, setSelectedGenre] = useState('All')
   const [selectedRating, setSelectedRating] = useState('All')
   const [editingBook, setEditingBook] = useState(null)
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState(null)
 
   const { user, isAuthenticated, logout } = useAuth()
 
@@ -144,7 +144,7 @@ function App() {
         editingBook={editingBook}
       />
     </div>
-  );
+  )
 }
 
 export default App;

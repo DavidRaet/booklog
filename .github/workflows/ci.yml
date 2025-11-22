@@ -7,6 +7,21 @@ on:
       - main 
 
 jobs:
+  frontend-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install Dependencies 
+        run: npm ci
+        working-directory: ./frontend
+      
+      - name: Run Tests
+        run: npm test 
+        working-directory: ./frontend
+
   backend-tests:
     runs-on: ubuntu-latest
     services:
@@ -47,8 +62,6 @@ jobs:
             POSTGRES_DB: ${{ vars.POSTGRES_DB }}
             POSTGRES_PASSWORD: ${{ vars.POSTGRES_PASSWORD }}
             POSTGRES_USER: ${{ vars.POSTGRES_USER }}
-
-          
 
   lint:
       runs-on: ubuntu-latest
