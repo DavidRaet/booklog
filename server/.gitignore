@@ -1,5 +1,6 @@
 .env
 .env.docker
 .env.local
+.env.prod
 .env.*.local
 node_modules/

@@ -1,40 +1,34 @@
 import pool from "../database.js";
 import bcrypt from 'bcrypt';
+import { User } from '../models/index.js';
 
 const SALT_ROUNDS = 10;
 
 export const createUser = async (username, email, password) => {
     const password_hash = await bcrypt.hash(password, SALT_ROUNDS);
+    const user = await User.create({
+        username, 
+        email, 
+        password_hash
+    });
 
-    const result = await pool.query(
-        `INSERT INTO USERS (username, email, password_hash)
-         VALUES ($1, $2, $3)
-         RETURNING id, username, email, created_at
-        `,
-        [username, email, password_hash]
-    );
-
-    return result.rows[0];
+    return user;
 };
 
 
 export const getUserByEmail = async (email) => {
-    const result = await pool.query(`
-        SELECT * FROM users WHERE email = $1
-        `, [email]
-    );
+    const user = await User.findOne({
+        where: { email }
+    })
 
-    return result.rows[0];
+    return user;
 };
 
 
 export const getUserById = async (id) => {
-    const result = await pool.query(`
-        SELECT id, username, email, created_at FROM users WHERE id = $1 
-        `, [id]
-    );
+    const user = await User.findByPk(id);
 
-    return result.rows[0];
+    return user;
 };
 
 export const confirmPassword = async (plainPassword, hashedPassword) => {

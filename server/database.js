@@ -1,26 +1,21 @@
-import pg from 'pg';
 import dotenv from 'dotenv';
+import sequelize from './config/database.js';
 
 dotenv.config();
 
-const { Pool } = pg ;
-
-
-const pool = new Pool({
-    user: process.env.POSTGRES_USER,
-    password: process.env.POSTGRES_PASSWORD,
-    database: process.env.POSTGRES_DB,
-    host: process.env.POSTGRES_HOST,
-    port: process.env.POSTGRES_PORT
-});
-
-pool.query('SELECT NOW()', (err, res) => {
-    if (err) {
-        console.error('Database connection failed: ', err);
-    } else {
-        console.log('Database connection successful: ', res.rows[0].now);
+const connectDB = async () => {
+    try {
+        await sequelize.authenticate();
+        console.log('Database connection successful!');
+        if (process.env.NODE_ENV === 'development') {
+            await sequelize.sync({ alter: false });
+        }
+    } catch (error){
+        console.log('Unable to connect to the database', error);
+        process.exit(1);
     }
-});
+}
 
 
-export default pool;
+
+export default connectDB;
