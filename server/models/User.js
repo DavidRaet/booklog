@@ -35,12 +35,12 @@ const User = sequelize.define('User', {
         underscored: true,
         indexes: [
             {
-                name: user_email_index,
+                name: 'user_email_index',
                 fields: ['email'],
                 using: 'BTREE'
             }, 
             {
-                name: username_index,
+                name: 'username_index',
                 fields: ['username'],
                 using: 'BTREE'
             }
