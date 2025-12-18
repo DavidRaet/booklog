@@ -26,60 +26,83 @@
 
 
 
-## Installation Instructions 
+# Installation Instructions 
 
-# Prerequisites
+## Prerequisites
 Docker & Docker Compose (recommended), 
 OR
 Node.js 18+ and PostgreSQL 13+ (for manual setup)
 
 
 
-<!-- Option 1: Using Docker -->
-# Clone the repository
+## Option 1: Using Docker
+
+### Clone the repository
+```
 git clone <repository-url>
 cd booklog
+```
 
-# Create environment file
+
+### Create environment file
+```
 cp server/.env.example server/.env.prod
-# Edit server/.env.prod with your database credentials
+```
+Make sure to edit server/.env.prod with your database credentials
 
-# Start all services
+### Start all services
+```
 docker-compose up --build
+```
 
-# Access the app
-# Frontend: http://localhost:5173
-# Backend API: http://localhost:3002
+### Access the app
+Frontend: http://localhost:5173
+Backend API: http://localhost:3002
 
 
-<!-- Option 2: Manual Setup -->
-# Create a database named 'booklog' (or your preferred name)
-`createdb booklog`
+## Option 2: Manual Setup
 
-# Set up Backend
-`cd server`
+### Create a database named 'booklog' (or your preferred name)
+```
+createdb booklog
+```
 
-# Install dependencies
-`npm install`
+### Set up Backend
+```
+cd server
+```
 
-# Create .env file
-`cp .env.example .env`
-# Configure: DB_HOST, DB_PORT, DB_NAME, DB_USER, DB_PASSWORD, JWT_SECRET
+### Install dependencies
+```
+npm install
+```
 
-# Start the server
+### Create .env file
+```
+cp .env.example .env
+```
+Configure your env variables: DB_HOST, DB_PORT, DB_NAME, DB_USER, DB_PASSWORD, JWT_SECRET
+
+### Start the server
 npm start
-# Server runs on http://localhost:3002
+Server runs on http://localhost:3002
 
 ## Set up Frontend
-`cd frontend`
+```
+cd frontend
+```
 
-# Install dependencies
-`npm install`
+### Install dependencies
+```
+npm install
+```
 
-# Start development server
-`npm run dev`
+### Start development server
+```
+npm run dev
+```
 
-# Frontend runs on http://localhost:5173
+Frontend runs on http://localhost:5173
 
 
 ## Environment Variables
@@ -95,13 +118,21 @@ PORT=3002
 ```
 
 ## Testing 
-# Frontend tests
-`cd frontend`
-`npm test`
+### Frontend tests
+```
+cd frontend
+```
+```
+npm test
+```
 
-# Backend tests
-`cd server`
-`npm test`
+### Backend tests
+```
+cd server
+```
+```
+npm test
+```
 
 
 
