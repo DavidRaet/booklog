@@ -12,7 +12,7 @@
 
 
 
-> Anticipated features based on current implementation patterns include:
+#### Anticipated features based on current implementation patterns include:
 - Advanced Search: Full-text search across reviews and multi-criteria filtering
 - Reading Status Tracking: Mark books as "to-read," "currently reading," or "completed"
 - Reading Statistics: Visual analytics and insights into reading habits
