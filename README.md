@@ -10,17 +10,18 @@
 
 > BookLog is a full-stack web application that helps readers track, organize, and review their personal book collection. Built with a modern tech stack, it provides an intuitive interface for managing your reading journey with features like search, filtering, and detailed book reviews. This project is actively under development. 
 
-> Anticipated features based on current implementation patterns include:
 
-> Advanced Search: Full-text search across reviews and multi-criteria filtering
-> Reading Status Tracking: Mark books as "to-read," "currently reading," or "completed"
-> Reading Statistics: Visual analytics and insights into reading habits
-> Book Collections/Shelves: Organize books into custom categories
-> Social Features: Share reviews and discover books from other readers
-> Reading Goals: Set and track annual reading targets
-> Book Recommendations: Personalized suggestions based on reading history
-> Import/Export: Bulk import from CSV or export your library
-> Dark Mode: Theme toggle for comfortable reading in any lighting
+
+> Anticipated features based on current implementation patterns include:
+- Advanced Search: Full-text search across reviews and multi-criteria filtering
+- Reading Status Tracking: Mark books as "to-read," "currently reading," or "completed"
+- Reading Statistics: Visual analytics and insights into reading habits
+- Book Collections/Shelves: Organize books into custom categories
+- Social Features: Share reviews and discover books from other readers
+- Reading Goals: Set and track annual reading targets
+- Book Recommendations: Personalized suggestions based on reading history
+- Import/Export: Bulk import from CSV or export your library
+- Dark Mode: Theme toggle for comfortable reading in any lighting
 
 
 
