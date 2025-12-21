@@ -3,6 +3,7 @@ import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import authRoutes from './routes/auth.js';
 import booksRoutes from './routes/books.js';
+import errorHandler from './middleware/errorHandler.js';
 import env from './config/env.js';
 
 const app = express();
@@ -26,6 +27,7 @@ if (process.env.NODE_ENV !== 'test') {
         console.log(`Server running on ${API_BASE_URL}`);
     });
 }
+app.use(errorHandler);
 
 export default app;
 
