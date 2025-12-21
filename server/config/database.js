@@ -2,7 +2,7 @@ import { Sequelize } from "sequelize";
 import dotenv from 'dotenv';
 
 
-dotenv.config();
+dotenv.config({path: '../server/.env.local'});
 
 
 const sequelize = new Sequelize(
