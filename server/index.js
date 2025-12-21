@@ -21,13 +21,13 @@ app.use(cookieParser());
 
 app.use('/api/auth', authRoutes);
 app.use('/api/books', booksRoutes);
+app.use(errorHandler);
 
 if (process.env.NODE_ENV !== 'test') {
     app.listen(port, () => {
         console.log(`Server running on ${API_BASE_URL}`);
     });
 }
-app.use(errorHandler);
 
 export default app;
 
