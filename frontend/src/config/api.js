@@ -8,7 +8,7 @@
  * e.g fetching data, submitting forms, etc.
  */
 module.exports = {
-    apiBaseUrl: process.env.API_BASE_URL || 'http://localhost:3000/api',
+    apiBaseUrl: import.meta.env.VITE_API_URL || 'http://localhost:3000/api',
     timeout: parseInt(process.env.API_TIMEOUT, 10) || 5000,
     headers: {
         'Content-Type': 'application/json',
