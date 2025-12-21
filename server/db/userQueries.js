@@ -1,4 +1,3 @@
-import pool from "../database.js";
 import bcrypt from 'bcrypt';
 import { User } from '../models/index.js';
 
@@ -19,7 +18,7 @@ export const createUser = async (username, email, password) => {
 export const getUserByEmail = async (email) => {
     const user = await User.findOne({
         where: { email }
-    })
+    });
 
     return user;
 };

@@ -14,7 +14,7 @@ export const getBookById = async (id) => {
 export const getBooksByUserId = async (userId) => {
     const result = await models.Book.findAll({
         where: {user_id: userId}
-    })
+    });
     return result;
 };
 
