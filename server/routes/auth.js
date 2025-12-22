@@ -2,7 +2,7 @@ import { generateToken, verifyToken } from '../utils/jwt.js';
 import LoginSchema  from '../schemas/LoginSchema.js';
 import SignUpSchema  from '../schemas/SignUpSchema.js';
 import express from 'express';
-import authService from '../services/authService.js';
+import {authService} from '../services/authService.js';
 
 const router = express.Router();;
 

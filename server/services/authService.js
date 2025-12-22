@@ -13,10 +13,12 @@ export class AuthService {
      * This is the signup method for registering a new user.
      * If the email is already registered, it throws an error and warns the user.
      * that the email is already in use.
-     * @param {*} username provided username by the user.
-     * @param {*} email provided email by the user.
-     * @param {*} password provided password by the user that will be hashed.
-     * @returns an object containing the JWT token and user info.
+     * @param {string} username provided username by the user.
+     * @param {string} email provided email by the user.
+     * @param {string} password provided password by the user that will be hashed.
+     * @returns {Promise<{token: string, user: {id: number, username: string, email: string}}>} 
+     * An object containing the JWT token and user info.
+     * @throws {Error} 409 - if the email is already registered.
      */
     async signup(username, email, password) {
         const existingUser = await userQueries.getUserByEmail(email);
@@ -26,7 +28,7 @@ export class AuthService {
             throw error;
         }
         const user = await userQueries.createUser(username, email, password);
-        const token = generateToken(user.id);
+        const token = jwtUtils.generateToken(user.id);
 
         return {
             token, 
@@ -42,10 +44,11 @@ export class AuthService {
      * This is the login method for authenticating an existing user.
      * It checks if the email exists and if the password matches.
      * If either check fails, it throws an error indicating invalid credentials.
-     * What I learned is that it's important to not reveal which part of the login failed to enhance security.
-     * @param {*} email the email provided by the user.
-     * @param {*} password the password provided by the user.
-     * @returns an object containing the JWT token and user info.
+     * @param {string} email the email provided by the user.
+     * @param {string} password the password provided by the user.
+     * @returns {Promise<{token: string, user: {id: number, username: string, email: string}}>}  
+     * An object containing the JWT token and user info.
+     * @throws {Error} 401 - if the email does not exist or the password is incorrect.
      */
     async login(email, password) {
         const user = await userQueries.getUserByEmail(email);
