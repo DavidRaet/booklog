@@ -7,6 +7,10 @@
  * The use of this module will be in various parts of the server application where configuration settings are required.
  * e.g database connection, server port, authentication secrets, etc.
  */
+import dotenv from 'dotenv';
+
+dotenv.config();
+
 export default {
     port: process.env.PORT || 3000,
     dbUri: process.env.POSTGRES_URL || 'postgresql://[user[:password]@][host][:port][/dbname][?param1=value1&param2=value2]',

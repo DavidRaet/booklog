@@ -4,7 +4,7 @@ import app from '../../index.js';
 import pool from '../../database.js';
 import { createUser } from '../../db/userQueries.js';
 import { generateToken } from '../../utils/jwt.js';
-import { createRandomUser } from '../../utils/createRandomUser.js';
+import { createRandomUser } from '../helpers/createRandomUser.js';
 
 describe('Book Routes Integration', () => {
     let authToken;
