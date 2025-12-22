@@ -7,12 +7,12 @@
  * The use of this module will be in various parts of the frontend application where API calls are made.
  * e.g fetching data, submitting forms, etc.
  */
-module.exports = {
+export default {
     apiBaseUrl: import.meta.env.VITE_API_URL || 'http://localhost:3000/api',
-    timeout: parseInt(process.env.API_TIMEOUT, 10) || 5000,
+    timeout: parseInt(import.meta.env.API_TIMEOUT, 10) || 5000,
     headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
     },
-    retryAttempts: parseInt(process.env.API_RETRY_ATTEMPTS, 10) || 3,
+    retryAttempts: parseInt(import.meta.env.API_RETRY_ATTEMPTS, 10) || 3,
 };

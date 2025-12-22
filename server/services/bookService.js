@@ -49,9 +49,9 @@ export class BookService {
      * @param {string} userId the ID of the user requesting the update.
      * @returns {Promise<Book>} the updated book entry.
      */
-    async updateBook(bookId, userId) {
-        const verifiedBook = await this.getBookById(bookId, userId);
-        return await bookQueries.updateBook(bookId, verifiedBook);
+    async updateBook(bookId, userId, bookData) {
+        await this.getBookById(bookId, userId);
+        return await bookQueries.updateBook(bookId, bookData);
     }
 
     /**

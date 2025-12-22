@@ -5,7 +5,7 @@ import { authenticateToken } from '../middleware/auth.js';
 
 const router = express.Router();
 
-router.get("/", authenticateToken, async (req, res) => {
+router.get("/", authenticateToken, async (req, res, next) => {
     try {
         const books = await bookService.getBooksByUser(req.userId);
         res.status(200).json(books);
@@ -14,7 +14,7 @@ router.get("/", authenticateToken, async (req, res) => {
     }
 });
 
-router.get("/:id", authenticateToken, async (req, res) => {
+router.get("/:id", authenticateToken, async (req, res, next) => {
     try {
         const id = req.params.id;
         const book = await bookService.verifyBookOwnership(id, req.userId);
@@ -24,7 +24,7 @@ router.get("/:id", authenticateToken, async (req, res) => {
     }
 });
 
-router.post("/", authenticateToken, async (req, res) => {
+router.post("/", authenticateToken, async (req, res, next) => {
     console.log('User ID from token:', req.userId);
     const result = BookSchema.omit({ id: true, user_id: true }).safeParse(req.body);
 
@@ -44,7 +44,7 @@ router.post("/", authenticateToken, async (req, res) => {
     }
 });
 
-router.put("/:id", authenticateToken, async (req, res) => {
+router.put("/:id", authenticateToken, async (req, res, next) => {
     const id = req.params.id;
     const userId = req.userId;
     const validation = BookSchema.omit({ user_id: true }).safeParse(req.body);
@@ -57,15 +57,14 @@ router.put("/:id", authenticateToken, async (req, res) => {
     }
 
     try {
-        await bookService.verifyBookOwnership(id, userId);
-        const updatedBook = await bookService.updateBook(id, userId);
+        const updatedBook = await bookService.updateBook(id, userId, validation.data);
         res.status(200).json(updatedBook);
     } catch (err) {
         next(err);
     }
 });
 
-router.delete("/:id", authenticateToken, async (req, res) => {
+router.delete("/:id", authenticateToken, async (req, res, next) => {
     const id = req.params.id;
     try {
         await bookService.deleteBook(id, req.userId);

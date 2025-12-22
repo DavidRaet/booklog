@@ -11,26 +11,40 @@ import Login from './pages/Login'
 import Signup from './pages/Signup'
 import ProtectedRoute from './components/ProtectedRoute'
 import { useAuth } from './hooks/useAuth'
-
+import { useBook } from './hooks/useBook'
 import LoadingState from './components/LoadingState';
 import ErrorState from './components/ErrorState';
+
 
 function App() {
   const location = useLocation()
   const isAuthPage = ['/login', '/signup'].includes(location.pathname)
-  const [books, setBooks] = useState([])
-  const [isModalOpen, setIsModalOpen] = useState(false)
-  const [searchBook, setSearchBook] = useState('')
-  const [selectedGenre, setSelectedGenre] = useState('All')
-  const [selectedRating, setSelectedRating] = useState('All')
-  const [editingBook, setEditingBook] = useState(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
 
-  const { user, isAuthenticated, logout } = useAuth()
-
-  console.log('Auth state', { user, isAuthenticated })
-
+  const { 
+    isAuthenticated, 
+    logout 
+          } = useAuth();
+  const { 
+    searchBook, 
+    selectedRating, 
+    selectedGenre, 
+    filteredBooks, 
+    editingBook, 
+    isModalOpen,
+    setBooks, 
+    setSearchBook, 
+    setSelectedGenre, 
+    setSelectedRating, 
+    setEditingBook,
+    setIsModalOpen, 
+    handleAddBook, 
+    handleUpdateBook, 
+    handleSaveNewEditedBook, 
+    handleDeleteBook, 
+                  } = useBook();
+  
   useEffect(() => {
     if (isAuthenticated) {
       setLoading(true)
@@ -46,55 +60,7 @@ function App() {
       }
       fetchBooks()
     }
-  }, [isAuthenticated])
-
-
-  const handleAddBook = async (newBook) => {
-    try {
-      const bookData = await bookService.createBook(newBook)
-      console.log('Book from API:', bookData)
-      console.log('Current books:', books)
-      console.log('New books array:', [...books, bookData])
-      setBooks([...books, bookData])
-    } catch (err) {
-      alert("Failed to add book: " + err.message)
-      console.error(err)
-    }
-  }
-
-  const handleUpdateBook = (book) => {
-    setEditingBook(book)
-    setIsModalOpen(true)
-  }
-
-  const handleSaveNewBook = async (updatedBook) => {
-    try {
-      const updatedBookData = await bookService.updateBook(updatedBook.id, updatedBook)
-      setBooks(books.map(book => book.id === updatedBookData.id ? updatedBookData : book))
-
-    } catch (err) {
-      alert("Failed to update book: " + err.message)
-      throw err
-    }
-  }
-
-  const handleDeleteBook = async (bookID) => {
-    try {
-      if (window.confirm("Are you sure you want to delete this book?")) {
-        await bookService.deleteBook(bookID)
-        setBooks(books.filter(book => book.id !== bookID))
-      } else {
-        return
-      }
-    } catch (err) {
-      alert("Failed to delete book: " + err.message)
-    }
-  }
-
-  const filteredBooks =
-    books.filter(book => book.title.toLowerCase().includes(searchBook.toLowerCase()))
-      .filter(book => selectedGenre === 'All' || book.genre === selectedGenre)
-      .filter(book => selectedRating === 'All' || book.rating >= parseInt(selectedRating))
+  }, [isAuthenticated]);
 
   return (
     <div className={isAuthPage ? "" : "min-h-screen bg-gray-50"}>
@@ -140,7 +106,7 @@ function App() {
           setIsModalOpen(false)
           setEditingBook(null)
         }}
-        onSubmit={editingBook ? handleSaveNewBook : handleAddBook}
+        onSubmit={editingBook ? handleSaveNewEditedBook : handleAddBook}
         editingBook={editingBook}
       />
     </div>
