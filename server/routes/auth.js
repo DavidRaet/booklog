@@ -17,7 +17,8 @@ router.get('/verify', async (req, res) => {
     }
 });
 
-router.post('/signup', async (req, res) => {
+
+router.post('/signup', async (req, res, next) => {
     const validation = SignUpSchema.safeParse(req.body);
     if(!validation.success) {
         return res.status(400).json({
@@ -38,7 +39,8 @@ router.post('/signup', async (req, res) => {
 });
 
 
-router.post('/login', async (req, res) => {
+
+router.post('/login', async (req, res, next) => {
     const validation = LoginSchema.safeParse(req.body);
     if(!validation.success) {
         return res.status(400).json({

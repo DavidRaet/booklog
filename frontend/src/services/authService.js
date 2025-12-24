@@ -1,11 +1,24 @@
-const API_BASE_URL = "http://localhost:3002/api"
+/**
+ * Authentication Service
+ * 
+ * Handles all API calls related to user authentication.
+ * Uses centralized API configuration from config/api.js for consistency.
+ * 
+ * WHY CENTRALIZED CONFIG:
+ * - Single source of truth for API base URL
+ * - Easy environment switching (dev/staging/prod)
+ * - DRY principle - change URL in one place
+ */
+import apiConfig from '../config/api.js';
+
+const { apiBaseUrl, headers } = apiConfig;
 
 export const authService = {
 
   signup: async (username, email, password) => {
-    const response = await fetch(`${API_BASE_URL}/auth/signup`, { 
+    const response = await fetch(`${apiBaseUrl}/auth/signup`, { 
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers,
         body: JSON.stringify({ username, email, password })
     })
     if (!response.ok) {
@@ -15,9 +28,9 @@ export const authService = {
   },
 
   login: async (email, password) => {
-        const response = await fetch(`${API_BASE_URL}/auth/login`, { 
+        const response = await fetch(`${apiBaseUrl}/auth/login`, { 
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers,
         body: JSON.stringify({ email, password })
     })
     if (!response.ok) {
@@ -27,14 +40,15 @@ export const authService = {
   },
 
   verifyToken: async (token) => {
-        const response = await fetch(`${API_BASE_URL}/auth/verify`, { 
+        const response = await fetch(`${apiBaseUrl}/auth/verify`, { 
         method: "GET",
         headers: { 
-          "Authorization": `Bearer ${token}`,
-          "Content-Type": "application/json" }
+          ...headers,
+          "Authorization": `Bearer ${token}`
+        }
     })
     if (!response.ok) {
-      throw new Error("Failed to login user")
+      throw new Error("Failed to verify token")
     }
     return response.json()
   }

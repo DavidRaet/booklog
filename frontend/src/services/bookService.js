@@ -1,16 +1,33 @@
-const API_BASE_URL = "http://localhost:3002/api";
+/**
+ * Book Service
+ * 
+ * Handles all API calls related to book CRUD operations.
+ * Uses centralized API configuration from config/api.js for consistency.
+ * 
+ * WHY CENTRALIZED CONFIG:
+ * - Single source of truth for API base URL
+ * - Easy environment switching (dev/staging/prod)
+ * - DRY principle - change URL in one place
+ */
+import apiConfig from '../config/api.js';
 
+const { apiBaseUrl, headers: defaultHeaders } = apiConfig;
+
+/**
+ * Builds request headers with authentication token
+ * Merges default headers from config with Authorization header
+ */
 const getHeaders = () => {
     const token = localStorage.getItem('token');
     return {
-        "Content-Type": "application/json",
+        ...defaultHeaders,
         "Authorization": token ? `Bearer ${token}` : ""
     };
 };
 
 export const bookService = {
     getAllBooks: async () => {
-        const response = await fetch(`${API_BASE_URL}/books`, {
+        const response = await fetch(`${apiBaseUrl}/books`, {
             headers: getHeaders()
         });
         if (!response.ok) throw new Error("Failed to fetch books.");
@@ -18,7 +35,7 @@ export const bookService = {
     },
 
     getBookById: async (id) => {
-        const response = await fetch(`${API_BASE_URL}/books/${id}`, {
+        const response = await fetch(`${apiBaseUrl}/books/${id}`, {
             headers: getHeaders()
         });
         if (!response.ok) throw new Error("Book not found.");
@@ -26,7 +43,7 @@ export const bookService = {
     },
 
     createBook: async (bookData) => {
-        const response = await fetch(`${API_BASE_URL}/books`, {
+        const response = await fetch(`${apiBaseUrl}/books`, {
             method: "POST",
             headers: getHeaders(),
             body: JSON.stringify(bookData)
@@ -37,7 +54,7 @@ export const bookService = {
     },
 
     updateBook: async (id, bookData) => {
-        const response = await fetch(`${API_BASE_URL}/books/${id}`, {
+        const response = await fetch(`${apiBaseUrl}/books/${id}`, {
             method: "PUT",
             headers: getHeaders(),
             body: JSON.stringify(bookData)
@@ -48,7 +65,7 @@ export const bookService = {
     },
 
     deleteBook: async (id) => {
-        const response = await fetch(`${API_BASE_URL}/books/${id}`, {
+        const response = await fetch(`${apiBaseUrl}/books/${id}`, {
             method: "DELETE",
             headers: getHeaders()
         });
