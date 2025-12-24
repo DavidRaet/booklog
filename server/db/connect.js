@@ -15,7 +15,7 @@ const connectDB = async () => {
         // Test the database connection
         await sequelize.authenticate();
         logger.info('Database connection successful');
-        if (process.env.local.NODE_ENV === 'development') {
+        if (process.env.NODE_ENV === 'development') {            
             await sequelize.sync({ alter: false });
         }
     } catch (error){

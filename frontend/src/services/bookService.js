@@ -19,12 +19,10 @@ const { apiBaseUrl, headers: defaultHeaders } = apiConfig;
  */
 const getHeaders = () => {
     const token = localStorage.getItem('token');
-    return {
-        ...defaultHeaders,
-        "Authorization": token ? `Bearer ${token}` : ""
-    };
+    return token 
+        ? { ...defaultHeaders, "Authorization": `Bearer ${token}` }
+        : { ...defaultHeaders };
 };
-
 export const bookService = {
     getAllBooks: async () => {
         const response = await fetch(`${apiBaseUrl}/books`, {
