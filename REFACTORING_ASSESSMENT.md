@@ -1,8 +1,8 @@
 # Booklog Codebase Assessment & Refactoring Roadmap
 
-**Date:** December 23, 2025  
+**Date:** December 24, 2025  
 **Stack:** Node.js/Express (Backend), React/Vite (Frontend), PostgreSQL, Docker  
-**Status:** 🟢 Priorities 1-3 Complete | 🟡 Testing & Deployment In Progress
+**Status:** 🟢 Priorities 1-4.2 Complete | 🟡 Testing & Security In Progress
 
 ---
 
@@ -48,8 +48,9 @@ booklog/
 │   │   └── Book.js
 │   │
 │   ├── routes/                       # HTTP route handlers
-│   │   ├── auth.js                   # Auth routes (signup, login, verify)
-│   │   └── books.js                  # ✅ NEW: Book CRUD routes (extracted)
+│   │   ├── auth.js                   # ✅ Auth routes (fixed next() bug)
+│   │   ├── books.js                  # ✅ Book CRUD routes (extracted)
+│   │   └── health.js                 # ✅ NEW: Health check endpoint
 │   │
 │   ├── schemas/                      # Zod validation schemas
 │   │   ├── BookSchema.js
@@ -61,7 +62,8 @@ booklog/
 │   │   └── bookService.js            # ✅ Book business logic
 │   │
 │   ├── utils/                        # Utility functions
-│   │   └── jwt.js                    # JWT generation/verification
+│   │   ├── jwt.js                    # JWT generation/verification
+│   │   └── logger.js                 # ✅ NEW: Winston logging abstraction
 │   │
 │   └── tests/
 │       ├── helpers/
@@ -143,6 +145,16 @@ booklog/
 | Extracted book state to Context | ✅ Complete | `frontend/src/context/BookContext.jsx` |
 | Consolidated frontend configs | ✅ Complete | Removed duplicate `.cjs` files |
 
+### **Testing & Observability (Priority 4.1-4.2) - December 24, 2025**
+
+| Item | Status | Impact |
+|------|--------|--------|
+| **Fixed `next()` bug in auth routes** | ✅ Complete | `signup` and `login` routes now properly pass errors to global handler |
+| Added Winston logging abstraction | ✅ Complete | `server/utils/logger.js` - structured logging with env-based levels |
+| Replaced all `console.*` calls | ✅ Complete | Consistent logging in `errorHandler.js`, `index.js`, `connect.js`, `books.js` |
+| Added health check endpoint | ✅ Complete | `GET /health` - checks DB connectivity, returns latency metrics |
+| Fixed frontend API config usage | ✅ Complete | `authService.js` and `bookService.js` now use centralized config |
+
 ---
 
 ## 🎯 Current Priority: Testing & Deployment Readiness
@@ -151,8 +163,8 @@ booklog/
  
 | # | Smell | Location | Impact | Priority |
 |---|-------|----------|--------|----------|
-| 1 | **No logging abstraction** | `console.log()` scattered everywhere | **Medium** – Hard to control log levels in production | P4.1 |
-| 2 | **Missing health check endpoint** | No `/health` route | **Medium** – Can't verify server is up | P4.2 |
+| 1 | ~~**No logging abstraction**~~ | ~~`console.log()` scattered everywhere~~ | ~~**Medium**~~ | ✅ P4.1 Complete |
+| 2 | ~~**Missing health check endpoint**~~ | ~~No `/health` route~~ | ~~**Medium**~~ | ✅ P4.2 Complete |
 | 3 | **Insufficient test coverage** | Frontend components, service layer | **High** – Risk for production deployment | P4.3 |
 | 4 | **No rate limiting** | Auth endpoints unprotected | **High** – Security risk | P5.1 |
 | 5 | **No security headers** | Missing helmet middleware | **High** – Security vulnerability | P5.2 |
@@ -165,14 +177,15 @@ booklog/
 
 ### **Priority 4: Testing & Observability (CURRENT FOCUS)**
 
-#### **4.1 Add Logging Abstraction**
+#### **4.1 Add Logging Abstraction** ✅ COMPLETE
 - **Why it matters:** `console.log()` everywhere makes it hard to control log levels in production
-- **What to change:**
-  - Add `winston` or `pino` logging library
-  - Create `server/utils/logger.js` wrapper
-  - Replace all `console.*` calls
-- **Risk:** Low (additive change)
-- **Files affected:** All server files using `console.*`
+- **What was implemented:**
+  - Added `winston` logging library
+  - Created `server/utils/logger.js` with environment-aware formatting
+  - Development: colorized, human-readable output
+  - Production: JSON format for log aggregation tools
+  - Test: silent mode to keep test output clean
+- **Files changed:** `errorHandler.js`, `index.js`, `connect.js`, `books.js`, `database.js`
 
 **server/utils/logger.js:**
 ```javascript
@@ -196,43 +209,23 @@ export default logger;
 
 ---
 
-#### **4.2 Add Health Check Endpoint**
-- **Why it matters:** Load balancers and monitoring tools need a simple endpoint to verify server is running
-- **What to change:**
-  - Add `GET /health` route
-  - Check DB connection + return status
-- **Risk:** Low
-- **Files affected:** `server/index.js` or new `server/routes/health.js`
-
-**server/routes/health.js:**
-```javascript
-import express from 'express';
-import sequelize from '../config/database.js';
-
-const router = express.Router();
-
-router.get('/', async (req, res) => {
-  try {
-    await sequelize.authenticate();
-    res.status(200).json({
-      status: 'ok',
-      timestamp: new Date().toISOString(),
-      services: {
-        database: 'connected'
-      }
-    });
-  } catch (error) {
-    res.status(503).json({
-      status: 'error',
-      timestamp: new Date().toISOString(),
-      services: {
-        database: 'disconnected'
-      }
-    });
+#### **4.2 Add Health Check Endpoint** ✅ COMPLETE
+- **Why it matters:** Load balancers and monitoring tools need a simple endpoint to verify server is running  
+- **What was implemented:**
+  - Created `server/routes/health.js` with DB connectivity check
+  - Returns server uptime, timestamp, and database latency
+  - Returns 503 if database is unreachable (enables load balancer failover)
+  - Registered at `/health` (no auth required)
+- **Response structure:**
+```json
+{
+  "status": "healthy",
+  "timestamp": "2025-12-24T10:30:45.000Z",
+  "uptime": 12345.67,
+  "checks": {
+    "database": { "status": "healthy", "latency": 5 }
   }
-});
-
-export default router;
+}
 ```
 
 ---
@@ -347,8 +340,8 @@ app.use(helmet({
 
 ### **Pre-Deployment (Complete Before Going Live)**
 
-- [ ] **P4.1** Add logging abstraction (winston/pino)
-- [ ] **P4.2** Add health check endpoint
+- [x] **P4.1** Add logging abstraction (winston/pino) ✅
+- [x] **P4.2** Add health check endpoint ✅
 - [ ] **P4.3** Achieve >80% backend test coverage
 - [ ] **P4.3** Add critical frontend component tests
 - [ ] **P5.1** Add rate limiting on auth endpoints
@@ -361,8 +354,8 @@ app.use(helmet({
 
 ### **Post-Deployment Monitoring**
 
-- [ ] Health check endpoint responding
-- [ ] Logging capturing errors
+- [x] Health check endpoint responding ✅ (GET /health)
+- [x] Logging capturing errors ✅ (Winston logger)
 - [ ] Rate limiting working on auth routes
 - [ ] No 500 errors in production
 - [ ] Database connection stable
@@ -486,6 +479,18 @@ app.use(helmet({
 | Security Hygiene | 7/10 | 0 | Still missing rate limiting, security headers |
 | DX/Documentation | 7/10 | +1 | Better structure, still no API docs |
 | **Overall** | **8.0/10** | **+1.8** | **Production-ready architecture, needs testing & security** |
+
+### **After Priorities 4.1-4.2 (Dec 24, 2025)**
+
+| Category | Score | Improvement | Notes |
+|----------|-------|-------------|-------|
+| Structure | 9/10 | — | Maintained |
+| Separation of Concerns | 9/10 | — | Maintained |
+| Consistency | 9/10 | — | ✅ Frontend services now use centralized config |
+| Testability | 7/10 | — | Still needs more tests |
+| Security Hygiene | 7/10 | — | Still missing rate limiting, security headers |
+| DX/Documentation | 8/10 | +1 | ✅ Health endpoint, structured logging, JSDoc comments |
+| **Overall** | **8.2/10** | **+0.2** | **Better observability, fixed auth bug** |
 
 ### **Target After Priorities 4-5 (Deployment)**
 

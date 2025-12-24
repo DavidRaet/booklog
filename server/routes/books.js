@@ -2,6 +2,7 @@ import express from 'express';
 import BookSchema from '../schemas/BookSchema.js';
 import { bookService } from '../services/bookService.js';
 import { authenticateToken } from '../middleware/auth.js';
+import logger from '../utils/logger.js';
 
 const router = express.Router();
 
@@ -25,7 +26,7 @@ router.get("/:id", authenticateToken, async (req, res, next) => {
 });
 
 router.post("/", authenticateToken, async (req, res, next) => {
-    console.log('User ID from token:', req.userId);
+    logger.debug('Creating book for user', { userId: req.userId });
     const result = BookSchema.omit({ id: true, user_id: true }).safeParse(req.body);
 
     if (result.success) {
