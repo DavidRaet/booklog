@@ -14,7 +14,7 @@ export const errorHandler = (err, req, res, next) => {
         stack: err.stack,
         statusCode: err.statusCode || 500,
         path: req.path,
-        mwethod: req.method
+        method: req.method
     });
 
     const statusCode = err.statusCode || 500;

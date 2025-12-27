@@ -224,7 +224,7 @@ describe('Error Handler Middleware', () => {
             expect(mockRes.status).toHaveBeenCalledWith(403);
         });
 
-        it('should handle 404 for not found properties ', () => {
+        it('should handle 404 for not found resources', () => {            
             const error = new Error('Resource not found');
             error.statusCode = 404;
 
