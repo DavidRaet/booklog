@@ -4,7 +4,7 @@ import SignUpSchema  from '../schemas/SignUpSchema.js';
 import express from 'express';
 import {authService} from '../services/authService.js';
 
-const router = express.Router();;
+const router = express.Router();
 
 
 
