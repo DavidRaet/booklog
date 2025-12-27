@@ -39,7 +39,7 @@ describe('Auth Middleware - authenticateToken unit testing', () => {
     });
 
     describe("Token Missing", () => {
-        it("Should return the response status and json message when token is missins", () => {
+        it("Should return the response status and json message when token is missing", () => {
             // Arrange
             mockReq.headers.authorization = 'Bearer';
             
