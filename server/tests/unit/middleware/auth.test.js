@@ -19,7 +19,7 @@ describe('Auth Middleware - authenticateToken unit testing', () => {
             json: vi.fn().mockReturnThis()
         };
         mockNext = vi.fn();
-    })
+    });
 
     describe("Valid Token", () => {
         it("Should call next() and set req.userId when token is valid", () => {
@@ -49,7 +49,7 @@ describe('Auth Middleware - authenticateToken unit testing', () => {
             expect(mockRes.status).toHaveBeenCalledWith(401);
             expect(mockRes.json).toHaveBeenCalledWith({message: "Access token required"});
             expect(mockNext).not.toHaveBeenCalled();
-        })
+        });
     });
 
 });
