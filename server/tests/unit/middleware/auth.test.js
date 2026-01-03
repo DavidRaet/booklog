@@ -4,6 +4,7 @@ import * as jwtUtils from '../../../utils/jwt.js';
 
 vi.mock('../../../utils/jwt.js');
 
+
 describe('Auth Middleware - authenticateToken unit testing', () => {
     let mockReq;
     let mockRes;
