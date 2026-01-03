@@ -68,5 +68,16 @@ jobs:
       steps:
           - uses: actions/checkout@v4 
           - uses: actions/setup-node@v4 
-          - run: npm ci 
-          - run: npm run lint 
+            with:
+              node-version: '20'
+          - name: Lint Frontend
+            run: |
+              npm ci 
+              npm run lint
+            working-directory: ./frontend
+          
+          - name: Lint Backend
+            run: |
+              npm ci 
+              npm run lint
+            working-directory: ./server
