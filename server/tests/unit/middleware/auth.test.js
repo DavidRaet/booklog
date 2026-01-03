@@ -8,7 +8,6 @@ describe('Auth Middleware - authenticateToken unit testing', () => {
     let mockReq;
     let mockRes;
     let mockNext; 
-
     beforeEach(() => {
         vi.clearAllMocks();
 
